@@ -53,22 +53,25 @@ const createMessageSelfElement = (content, time) => {
 
 const createMessageFriendElement = (content, sender, color, time) => {
     const div = document.createElement("div")
-    const span = document.createElement("span")
+    const name = document.createElement("span")
+    const p = document.createElement("p")
     const hour = document.createElement("span")
 
-    span.style.color = color
-    span.innerHTML = sender
-    span.classList.add("message-sender")
+    name.style.color = color
+    name.innerHTML = sender
+    name.classList.add("message-sender")
+
+    p.innerHTML = content
 
     hour.innerHTML = time
     hour.classList.add("message-hour")
 
     div.classList.add("message-friend")
-    div.appendChild(span)
-    
-    div.innerText += content
 
+    div.appendChild(name)
+    div.appendChild(p)
     div.appendChild(hour)
+    
     return div
 }
 
