@@ -12,9 +12,6 @@ wss.on("connection", (ws) => {
 
     // ws.send("Seja bem vindo!")
 
-    ws.on("open", function () {
-       ws.emit("old", JSON.parse("sim"))
-    })
 
     ws.on("message", (data) => {
         if(data.toString() === "load"){
