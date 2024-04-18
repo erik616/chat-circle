@@ -140,7 +140,7 @@ body {
     font-weight: 500;
     margin-bottom: .9rem;
     line-height: 1.4rem;
-
+    position: relative;
 }
 
 .message-self {
@@ -162,4 +162,12 @@ body {
     font-weight: 700;
     font-size: .8rem;
     color: brown;
+}
+
+.message-hour{
+    position: absolute;
+    right: .4rem;
+    bottom: .1rem;
+    font-size: .7rem;
+    color: inherit;
 }

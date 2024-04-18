@@ -36,26 +36,39 @@ const getUser = () => localStorage.getItem("@circle_app")
 const onUser = JSON.parse(getUser())
 const user = { id: "", name: "", color: "" }
 
-const createMessageSelfElement = (content) => {
+const createMessageSelfElement = (content, time) => {
     const div = document.createElement("div")
+    const hour = document.createElement("span")
+
+    hour.innerHTML = time
+    hour.classList.add("message-hour")
 
     div.classList.add("message-self")
+
     div.innerHTML = content
+    div.appendChild(hour)
+
     return div
 }
 
-const createMessageFriendElement = (content, sender, color) => {
+const createMessageFriendElement = (content, sender, color, time) => {
     const div = document.createElement("div")
     const span = document.createElement("span")
+    const hour = document.createElement("span")
 
     span.style.color = color
     span.innerHTML = sender
     span.classList.add("message-sender")
 
+    hour.innerHTML = time
+    hour.classList.add("message-hour")
+
     div.classList.add("message-friend")
     div.appendChild(span)
+    
+    div.innerText += content
 
-    div.innerHTML += content
+    div.appendChild(hour)
     return div
 }
 
@@ -76,11 +89,24 @@ function handleSubmit(event) {
 }
 
 function processMessage({ data }) {
-    // console.log(event);
-    const { message, userColor, userId, userName } = JSON.parse(data)
+    const messages = JSON.parse(data)
 
-    const element = userId == onUser.id ? createMessageSelfElement(message) : createMessageFriendElement(message, userName, userColor)
-    
+    if (messages.constructor === Array) {
+        const oldMessages = messages
+        for (const item of oldMessages) {
+            createMessage(item);
+        }
+
+    } else {
+        createMessage(data)
+    }
+}
+
+function createMessage(data) {
+    const { message, userColor, userId, userName, time } = JSON.parse(data)
+
+    const element = userId == onUser.id ? createMessageSelfElement(message, time) : createMessageFriendElement(message, userName, userColor, time)
+
     messages.appendChild(element)
     scrollScreen()
 }
@@ -88,12 +114,14 @@ function processMessage({ data }) {
 
 function handleMessage(event) {
     event.preventDefault()
+    const timeStemp = new Date()
 
     const message = {
         userId: onUser.id,
         userName: onUser.name,
         userColor: onUser.color,
-        message: chatInput.value
+        message: chatInput.value,
+        time: `${timeStemp.getHours()}:${timeStemp.getMinutes()}`
     }
 
     chatInput.value = ""
@@ -110,9 +138,8 @@ function app() {
 
     websocket = new WebSocket("ws://localhost:8080")
     websocket.onmessage = processMessage
-    // websocket.onopen = () => websocket.send(`User: ${onUser.name}`)
-    // console.log(websocket);
+    // websocket.onopen = () => websocket.send("load")
+    websocket.onopen = () => websocket.send("load")
 }
 app()
-
 //localStorage.removeItem("@circle_app")
