@@ -136,7 +136,7 @@ function app() {
     login.style.display = "none"
     chat.style.display = "flex"
 
-    websocket = new WebSocket("ws://localhost:8080")
+    websocket = new WebSocket("wss://chat-circle-back-room.onrender.com")
     websocket.onmessage = processMessage
     // websocket.onopen = () => websocket.send("load")
     websocket.onopen = () => websocket.send("load")
