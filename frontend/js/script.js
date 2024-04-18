@@ -118,13 +118,14 @@ function createMessage(data) {
 function handleMessage(event) {
     event.preventDefault()
     const timeStemp = new Date()
+    const min = timeStemp.getMinutes() < 10 ? `0${timeStemp.getMinutes()}` : timeStemp.getMinutes()
 
     const message = {
         userId: onUser.id,
         userName: onUser.name,
         userColor: onUser.color,
         message: chatInput.value,
-        time: `${timeStemp.getHours()}:${timeStemp.getMinutes()}`
+        time: `${timeStemp.getHours()}:${min}`
     }
 
     chatInput.value = ""
